@@ -85,25 +85,30 @@ private class DefaultLeaseCoordinator(
       .tapErrorCause(c => ZIO.logErrorCause("Error in DefaultLeaseCoordinator initialize", c))
 
   override def updateShards(shards: Map[ShardId, Shard.ReadOnly]): UIO[Unit] =
-    updateStateWithDiagnosticEvents(_.updateShards(shards))
+    updateStateWithDiagnosticEvents("updateShards", _.updateShards(shards))
 
   override def childShardsDetected(
     childShards: Seq[Shard.ReadOnly]
   ): ZIO[Any, Throwable, Unit] =
-    updateStateWithDiagnosticEvents(s =>
-      s.updateShards(s.shards ++ childShards.map(shard => shard.shardId -> shard).toMap)
+    updateStateWithDiagnosticEvents(
+      "childShardsDetected",
+      s => s.updateShards(s.shards ++ childShards.map(shard => shard.shardId -> shard).toMap)
     )
 
-  private def updateStateWithDiagnosticEvents(f: (State, Instant) => State): ZIO[Any, DateTimeException, Unit] =
-    now.flatMap(now => updateStateWithDiagnosticEvents(f(_, now)))
+  private def updateStateWithDiagnosticEvents(
+    name: String,
+    f: (State, Instant) => State
+  ): ZIO[Any, DateTimeException, Unit] =
+    now.flatMap(now => updateStateWithDiagnosticEvents(name, f(_, now)))
 
-  private def updateStateWithDiagnosticEvents(f: State => State): UIO[Unit] =
+  private def updateStateWithDiagnosticEvents(name: String, f: State => State): UIO[Unit] =
     for {
       stateBeforeAndAfter      <- state.modify { s =>
                                     val newState = f(s)
                                     ((s, newState), newState)
                                   }
       (stateBefore, stateAfter) = stateBeforeAndAfter
+      _                        <- ZIO.logInfo(s"State transition $name: ($stateBefore) -> ($stateAfter)")
       _                        <- emitWorkerPoolDiagnostics(
                                     stateBefore.currentLeases.map(_._2.lease),
                                     stateAfter.currentLeases.map(_._2.lease)
@@ -129,7 +134,10 @@ private class DefaultLeaseCoordinator(
 
   def leaseLost(lease: Lease, leaseCompleted: Promise[Nothing, Unit]): ZIO[Any, Throwable, Unit] =
     leaseCompleted.succeed(()) *>
-      updateStateWithDiagnosticEvents((s, now) => s.releaseLease(lease, now).updateLease(lease.release, now)) *>
+      updateStateWithDiagnosticEvents(
+        "leaseLost",
+        (s, now) => s.releaseLease(lease, now).updateLease(lease.release, now)
+      ) *>
       emitDiagnostic(DiagnosticEvent.ShardLeaseLost(lease.key))
 
   def releaseLease(shard: String) =
@@ -158,7 +166,7 @@ private class DefaultLeaseCoordinator(
       }
       .ignore *>
       completed.succeed(()) *>
-      updateStateWithDiagnosticEvents(_.releaseLease(updatedLease, _)) *>
+      updateStateWithDiagnosticEvents("releaseHeldLease", _.releaseLease(updatedLease, _)) *>
       emitDiagnostic(DiagnosticEvent.LeaseReleased(lease.key))
   }
 
@@ -200,7 +208,7 @@ private class DefaultLeaseCoordinator(
                         .renewLease(applicationName, updatedLease)
                         .timed
                         .map(_._1)
-          _        <- updateStateWithDiagnosticEvents(_.updateLease(updatedLease, _)).mapError(Left(_))
+          _        <- updateStateWithDiagnosticEvents("renewLease", _.updateLease(updatedLease, _)).mapError(Left(_))
           _        <- emitDiagnostic(DiagnosticEvent.LeaseRenewed(updatedLease.key, duration))
         } yield ()).catchAll {
           // This means the lease was updated by another worker
@@ -256,17 +264,22 @@ private class DefaultLeaseCoordinator(
                             ZIO.unit
                         // Lease that is still owned by us but is not actively held
                         case (_, None) if lease.owner.contains(workerId)                              =>
-                          updateStateWithDiagnosticEvents(_.updateLease(lease, _)) *> registerNewAcquiredLease(lease)
+                          updateStateWithDiagnosticEvents("refreshLease(1)", _.updateLease(lease, _)) *> registerNewAcquiredLease(
+                            lease
+                          )
                         // Update of a lease that we do not hold or have not yet seen
                         case _                                                                        =>
-                          updateStateWithDiagnosticEvents(_.updateLease(lease, _))
+                          updateStateWithDiagnosticEvents("refreshLease(2)", _.updateLease(lease, _))
                       }
     } yield ()
 
   private def registerNewAcquiredLease(lease: Lease): ZIO[Any, Nothing, Unit] =
     for {
       completed <- Promise.make[Nothing, Unit]
-      _         <- updateStateWithDiagnosticEvents((s, now) => s.updateLease(lease, now).holdLease(lease, completed, now)).orDie
+      _         <- updateStateWithDiagnosticEvents(
+                     "registerNewAcquiredLease",
+                     (s, now) => s.updateLease(lease, now).holdLease(lease, completed, now)
+                   ).orDie
       _         <- emitDiagnostic(DiagnosticEvent.LeaseAcquired(lease.key, lease.checkpoint))
       _         <- acquiredLeasesQueue.offer(lease -> completed)
     } yield ()
@@ -414,10 +427,10 @@ private class DefaultLeaseCoordinator(
                                   case Left(e)              =>
                                     ZIO.logWarning(s"Error updating checkpoint: $e") *> ZIO.fail(Left(e))
                                 }.onSuccess { _ =>
-                                  (updateStateWithDiagnosticEvents(_.updateLease(updatedLease, _)) *>
+                                  (updateStateWithDiagnosticEvents("updateCheckpoint(1)", _.updateLease(updatedLease, _)) *>
                                     (
                                       leaseCompleted.succeed(()) *>
-                                        updateStateWithDiagnosticEvents(_.releaseLease(updatedLease, _)) *>
+                                        updateStateWithDiagnosticEvents("updateCheckpoint(2)", _.releaseLease(updatedLease, _)) *>
                                         emitDiagnostic(DiagnosticEvent.LeaseReleased(shard)) *>
                                         emitDiagnostic(DiagnosticEvent.ShardEnded(shard)).when(shardEnded) <*
                                         takeLeases(currentShards).ignore.fork.when(
