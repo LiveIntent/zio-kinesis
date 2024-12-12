@@ -1,17 +1,17 @@
 import xerial.sbt.Sonatype.GitHubHosting
 import org.typelevel.scalacoptions.ScalacOptions
 
-val mainScala = "2.13.15"
-val allScala  = Seq(mainScala, "3.3.3")
+val mainScala = LiveIntentPlugin.Scala213
+val allScala  = Seq(mainScala)
 
 val excludeInferAny = { options: Seq[String] => options.filterNot(Set("-Xlint:infer-any")) }
 
 inThisBuild(
   List(
-    organization                     := "nl.vroste",
+    // organization                     := "nl.vroste",
     homepage                         := Some(url("https://github.com/svroonland/zio-kinesis")),
     licenses                         := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-    scalaVersion                     := mainScala,
+    scalaVersion                     := LiveIntentPlugin.Scala213,
     crossScalaVersions               := allScala,
     compileOrder                     := CompileOrder.JavaThenScala,
     Test / parallelExecution         := false,
@@ -48,9 +48,11 @@ val zioAwsVersion = "7.28.29.5"
 
 lazy val root = project
   .in(file("."))
+  .enablePlugins(LiveIntentPlugin)
   .settings(
     Seq(
-      scalafmtOnCompile := false
+      scalafmtOnCompile := false,
+      publish / skip    := true
     )
   )
   .settings(stdSettings: _*)
@@ -58,7 +60,7 @@ lazy val root = project
   .dependsOn(core, interopFutures, dynamicConsumer)
 
 lazy val core = (project in file("core"))
-  .enablePlugins(ProtobufPlugin)
+  .enablePlugins(ProtobufPlugin, LiveIntentPlugin)
   .settings(stdSettings: _*)
   .settings(
     Seq(
@@ -67,7 +69,6 @@ lazy val core = (project in file("core"))
   )
 
 lazy val stdSettings: Seq[sbt.Def.SettingsDefinition] = Seq(
-  Compile / compile / javacOptions ++= Seq("--release", "8"),
   Compile / scalacOptions ~= excludeInferAny,
   // Suppresses problems with Scaladoc @throws links
   testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
@@ -95,6 +96,7 @@ addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck"
 
 lazy val interopFutures = (project in file("interop-futures"))
   .settings(stdSettings: _*)
+  .enablePlugins(LiveIntentPlugin)
   .settings(
     name                       := "zio-kinesis-future",
     assembly / assemblyJarName := "zio-kinesis-future" + version.value + ".jar",
@@ -106,6 +108,7 @@ lazy val interopFutures = (project in file("interop-futures"))
 
 lazy val dynamicConsumer = (project in file("dynamic-consumer"))
   .settings(stdSettings: _*)
+  .enablePlugins(LiveIntentPlugin)
   .settings(
     name                       := "zio-kinesis-dynamic-consumer",
     assembly / assemblyJarName := "zio-kinesis-dynamic-consumer" + version.value + ".jar",

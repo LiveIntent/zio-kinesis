@@ -11,3 +11,9 @@ addSbtPlugin("com.github.sbt"     % "sbt-ci-release"           % "1.9.0")
 addSbtPlugin("com.github.sbt"     % "sbt-pgp"                  % "2.3.0")
 addSbtPlugin("com.github.sbt"     % "sbt-dynver"               % "5.1.0")
 addSbtPlugin("org.xerial.sbt"     % "sbt-sonatype"             % "3.12.2")
+
+// liveintent specific
+resolvers += "Artifactory" at "https://liveintent.jfrog.io/liveintent/sbt"
+addSbtPlugin("com.liveintent" % "li-sbt-plugins" % "8.8.2")
+libraryDependencies += "com.sun.activation"                       % "javax.activation" % "1.2.0"
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml"        % VersionScheme.Always

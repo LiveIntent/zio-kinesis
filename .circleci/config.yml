@@ -1,20 +1,43 @@
 version: 2.1
+
+orbs:
+  scala-build: liveintent/scala-build@10.3
+
 parameters:
-  tag_regex:
+  ssh_key_fingerprint:
     type: string
-    default: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+    default: "c2:73:84:c4:64:a4:81:69:c6:f3:35:ee:e4:09:bc:6d"
+  cache_prefix:
+    type: string
+    default: v1_java17
+  jdk_version:
+    type: string
+    default: "21"
+
+references:
+  any_commit: &any_commit
+    tags:
+      only: /.*/
+
+  untagged_snapshot: &untagged_commit
+    tags:
+      only: /^$/
+
 jobs:
   # Parameterized job with localstack container running
   run_with_localstack:
     parameters:
       image:
-        default: sbtscala/scala-sbt:eclipse-temurin-23.0.1_11_1.10.5_2.13.15
+        default: cimg/openjdk:<< pipeline.parameters.jdk_version >>.0
         type: string
       sbt_command:
         type: string
       resource_class:
         default: large
         type: string
+      save_cache:
+        default: true
+        type: boolean
     docker:
       - image: << parameters.image >>
       - image: localstack/localstack:3.4.0
@@ -31,75 +54,57 @@ jobs:
     resource_class: << parameters.resource_class >>
 
     steps:
-      - checkout
-      - restore_cache:
-          key: sbt-cache-{{ checksum "build.sbt" }}-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}
-      - run: apt update && apt install -y protobuf-compiler
-      - run: sbt << parameters.sbt_command >>
-      - save_cache:
-          key: sbt-cache-{{ checksum "build.sbt" }}-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}
-          paths:
-            - "~/.ivy2/cache"
-            - "~/.sbt"
-            - "~/.m2"
-  release:
-    docker:
-      - image: sbtscala/scala-sbt:eclipse-temurin-23.0.1_11_1.10.5_2.13.15
-    steps:
-      - checkout
-      - run: git fetch --tags
-      - restore_cache:
-          key: sbt-cache-{{ checksum "build.sbt" }}-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}
-      - run: apt update && apt install -y protobuf-compiler
-      - run: apt install -y gnupg
-      - run: export GPG_TTY=$(tty)
-      - run: echo $PGP_SECRET | base64 --decode | gpg --batch --import
-      - run: echo "credentials += Credentials(\"Sonatype Nexus Repository Manager\", \"oss.sonatype.org\", \"$SONATYPE_USERNAME\", \"$SONATYPE_PASSWORD\")" > ~/.sbt/1.0/sonatype.sbt
-      - run: sbt ci-release
-
+      - attach_workspace:
+          at: ~/project
+      - scala-build/run_cached:
+          command_name: << parameters.sbt_command >>
+          command: sbt << parameters.sbt_command >>
+          cache_prefix: << pipeline.parameters.cache_prefix >>
+          save_cache: << parameters.save_cache >>
 workflows:
   version: 2
   build:
     jobs:
+      - scala-build/compile:
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          name: compile
+          context: org-global
+          jdk_version: << pipeline.parameters.jdk_version >>
+          cache_prefix: << pipeline.parameters.cache_prefix >>
+          filters: *any_commit
+
       - run_with_localstack:
           name: lint
-          sbt_command: ++2.13.15! check
-          filters:
-            tags:
-              only: << pipeline.parameters.tag_regex >>
-      - run_with_localstack:
-          name: test3
-          image: sbtscala/scala-sbt:eclipse-temurin-23.0.1_11_1.10.5_3.3.4
-          sbt_command: ++3.3.3! core/test interopFutures/test
+          context: org-global
+          sbt_command: check
           requires:
-            - lint
-          filters:
-            tags:
-              only: << pipeline.parameters.tag_regex >>
+            - compile
+          filters: *any_commit
       - run_with_localstack:
           name: test213
-          sbt_command: ++2.13.15! interopFutures/compile core/test interopFutures/test Compile/doc
+          context: org-global
+          sbt_command: interopFutures/compile core/test interopFutures/test Compile/doc
+          save_cache: false
           requires:
-            - lint
-          filters:
-            tags:
-              only: << pipeline.parameters.tag_regex >>
+            - compile
+          filters: *any_commit
       - run_with_localstack:
           name: test213_dynamic_consumer
-          sbt_command: ++2.13.15! dynamicConsumer/test
+          context: org-global
+          sbt_command: dynamicConsumer/test
+          save_cache: false
+          requires:
+            - compile
+          filters: *any_commit
+
+      - scala-build/publish_sbt:
+          name: publish_snapshot
+          context: org-global
+          jdk_version: << pipeline.parameters.jdk_version >>
+          cache_prefix: << pipeline.parameters.cache_prefix >>
           requires:
             - lint
-          filters:
-            tags:
-              only: << pipeline.parameters.tag_regex >>
-      - release:
-          requires:
-            - test3
             - test213
             - test213_dynamic_consumer
-          filters:
-            branches:
-              only:
-                - master
-            tags:
-              only: /^v.*/
+          filters: *untagged_commit
