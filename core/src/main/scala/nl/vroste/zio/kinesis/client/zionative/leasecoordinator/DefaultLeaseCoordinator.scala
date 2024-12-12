@@ -108,7 +108,9 @@ private class DefaultLeaseCoordinator(
                                     ((s, newState), newState)
                                   }
       (stateBefore, stateAfter) = stateBeforeAndAfter
-      _                        <- ZIO.logInfo(s"State transition $name: ($stateBefore) -> ($stateAfter)")
+      _                        <- ZIO
+                                    .logInfo(s"State transition $name: ($stateBefore) -> ($stateAfter)")
+                                    .when(isNegativeJump(stateBefore, stateAfter))
       _                        <- emitWorkerPoolDiagnostics(
                                     stateBefore.currentLeases.map(_._2.lease),
                                     stateAfter.currentLeases.map(_._2.lease)
@@ -451,6 +453,19 @@ private class DefaultLeaseCoordinator(
             }
             .withParallelism(settings.maxParallelLeaseRenewals)
         ) *> ZIO.logDebug("releaseLeases done")
+
+  private def isNegativeJump(before: State, after: State): Boolean =
+    after.currentLeases.values.exists { leaseState =>
+      val shardId          = leaseState.lease.key
+      val beforeCheckpoint = before.currentLeases.get(shardId).flatMap(_.lease.checkpoint).flatMap(_.toOption)
+      val afterCheckpoint  = leaseState.lease.checkpoint.flatMap(_.toOption)
+
+      beforeCheckpoint.exists { beforeCheckpoint =>
+        afterCheckpoint.exists { afterCheckpoint =>
+          afterCheckpoint.sequenceNumber < beforeCheckpoint.sequenceNumber
+        }
+      }
+    }
 }
 
 private[zionative] object DefaultLeaseCoordinator {
