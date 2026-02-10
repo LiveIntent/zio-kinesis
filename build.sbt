@@ -40,8 +40,12 @@ inThisBuild(
   )
 )
 
-val zioVersion    = "2.1.24"
-val zioAwsVersion = "7.41.19.2"
+lazy val stdSettings: Seq[sbt.Def.SettingsDefinition] =
+  Seq(
+    // Suppresses problems with Scaladoc @throws links
+    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
+    libraryDependencies ++= Dependencies.Common
+  )
 
 lazy val root =
   project
@@ -57,29 +61,6 @@ lazy val core =
     .enablePlugins(LiveIntentPlugin, ProtobufPlugin)
     .settings(stdSettings: _*)
     .settings(name := "zio-kinesis")
-
-lazy val stdSettings: Seq[sbt.Def.SettingsDefinition] =
-  Seq(
-    // Suppresses problems with Scaladoc @throws links
-    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
-    libraryDependencies ++= Seq(
-      "dev.zio"         %% "zio"                         % zioVersion,
-      "dev.zio"         %% "zio-streams"                 % zioVersion,
-      "dev.zio"         %% "zio-test"                    % zioVersion % "test",
-      "dev.zio"         %% "zio-test-sbt"                % zioVersion % "test",
-      "dev.zio"         %% "zio-interop-reactivestreams" % "2.0.2",
-      "dev.zio"         %% "zio-logging"                 % "2.5.3",
-      "dev.zio"         %% "zio-logging-slf4j"           % "2.5.3",
-      "ch.qos.logback"   % "logback-classic"             % "1.5.28",
-      "org.hdrhistogram" % "HdrHistogram"                % "2.2.2",
-      "dev.zio"         %% "zio-aws-core"                % zioAwsVersion,
-      "dev.zio"         %% "zio-aws-kinesis"             % zioAwsVersion,
-      "dev.zio"         %% "zio-aws-dynamodb"            % zioAwsVersion,
-      "dev.zio"         %% "zio-aws-cloudwatch"          % zioAwsVersion,
-      "dev.zio"         %% "zio-aws-netty"               % zioAwsVersion,
-      "javax.xml.bind"   % "jaxb-api"                    % "2.3.1"
-    )
-  )
 
 lazy val interopFutures =
   project
@@ -99,9 +80,9 @@ lazy val dynamicConsumer =
     .enablePlugins(LiveIntentPlugin)
     .settings(stdSettings: _*)
     .settings(
-      name                                            := "zio-kinesis-dynamic-consumer",
-      assembly / assemblyJarName                      := "zio-kinesis-dynamic-consumer" + version.value + ".jar",
-      libraryDependencies += "software.amazon.kinesis" % "amazon-kinesis-client" % "3.3.0"
+      name                       := "zio-kinesis-dynamic-consumer",
+      assembly / assemblyJarName := "zio-kinesis-dynamic-consumer" + version.value + ".jar",
+      libraryDependencies ++= Dependencies.DynamicConsumer
     )
     .dependsOn(core % "compile->compile;test->test")
 
@@ -111,9 +92,9 @@ lazy val testUtils =
     .enablePlugins(LiveIntentPlugin)
     .settings(stdSettings: _*)
     .settings(
-      name                             := "zio-kinesis-test-utils",
-      assembly / assemblyJarName       := "zio-kinesis-test-utils" + version.value + ".jar",
-      libraryDependencies += "dev.zio" %% "zio-test" % zioVersion
+      name                       := "zio-kinesis-test-utils",
+      assembly / assemblyJarName := "zio-kinesis-test-utils" + version.value + ".jar",
+      libraryDependencies ++= Dependencies.TestUtils
     )
     .dependsOn(dynamicConsumer % "compile->compile;test->test")
 
@@ -121,6 +102,6 @@ lazy val tests =
   project
     .in(file("test"))
     .enablePlugins(LiveIntentPlugin)
-    .dependsOn(dynamicConsumer % "compile->compile;test->test", testUtils % "compile->compile")
     .settings(stdSettings: _*)
     .settings(publish / skip := true)
+    .dependsOn(dynamicConsumer % "compile->compile;test->test", testUtils % "compile->compile")
