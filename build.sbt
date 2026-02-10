@@ -19,7 +19,6 @@ inThisBuild(
     Test / parallelExecution         := false,
     Global / cancelable              := true,
     Test / fork                      := true,
-    Test / fork                      := true,
     assembly / assemblyMergeStrategy := {
       case PathList("META-INF", xs @ _*)       => MergeStrategy.discard
       case n if n.startsWith("reference.conf") => MergeStrategy.concat
