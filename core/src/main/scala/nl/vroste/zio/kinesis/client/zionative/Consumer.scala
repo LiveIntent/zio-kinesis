@@ -2,13 +2,13 @@ package nl.vroste.zio.kinesis.client.zionative
 
 import nl.vroste.zio.kinesis.client.Util.ZStreamExtensions
 import nl.vroste.zio.kinesis.client.serde.Deserializer
-import nl.vroste.zio.kinesis.client.zionative.FetchMode.{ EnhancedFanOut, Polling }
+import nl.vroste.zio.kinesis.client.zionative.FetchMode.{EnhancedFanOut, Polling}
 import nl.vroste.zio.kinesis.client.zionative.Fetcher.EndOfShard
 import nl.vroste.zio.kinesis.client.zionative.LeaseCoordinator.AcquiredLease
-import nl.vroste.zio.kinesis.client.zionative.fetcher.{ EnhancedFanOutFetcher, PollingFetcher }
-import nl.vroste.zio.kinesis.client.zionative.leasecoordinator.{ DefaultLeaseCoordinator, LeaseCoordinationSettings }
+import nl.vroste.zio.kinesis.client.zionative.fetcher.{EnhancedFanOutFetcher, PollingFetcher}
+import nl.vroste.zio.kinesis.client.zionative.leasecoordinator.{DefaultLeaseCoordinator, LeaseCoordinationSettings}
 import nl.vroste.zio.kinesis.client.zionative.leaserepository.DynamoDbLeaseRepository
-import nl.vroste.zio.kinesis.client.{ HttpClientBuilder, Record, Util, _ }
+import nl.vroste.zio.kinesis.client.{HttpClientBuilder, Record, Util, _}
 import software.amazon.awssdk.services.kinesis.model.{
   KmsThrottlingException,
   LimitExceededException,
@@ -18,7 +18,7 @@ import zio._
 import zio.aws.cloudwatch.CloudWatch
 import zio.aws.kinesis.Kinesis
 import zio.aws.kinesis.model._
-import zio.aws.kinesis.model.primitives.{ SequenceNumber, ShardId, Timestamp }
+import zio.aws.kinesis.model.primitives.{SequenceNumber, ShardId, Timestamp}
 import zio.stream.ZStream
 
 import java.time.Instant

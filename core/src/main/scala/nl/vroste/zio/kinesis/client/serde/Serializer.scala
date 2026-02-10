@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis.client.serde
 
-import zio.{ Chunk, RIO }
+import zio.{Chunk, RIO}
 
 /**
  * Serializer from values of some type T to a byte array

@@ -4,7 +4,13 @@ import nl.vroste.zio.kinesis.client.serde.Deserializer
 import nl.vroste.zio.kinesis.client.zionative.Consumer.InitialPosition
 import nl.vroste.zio.kinesis.client.zionative.leasecoordinator.LeaseCoordinationSettings
 import nl.vroste.zio.kinesis.client.zionative.leaserepository.DynamoDbLeaseRepository
-import nl.vroste.zio.kinesis.client.zionative.{ DiagnosticEvent, FetchMode, LeaseRepository, ShardAssignmentStrategy }
+import nl.vroste.zio.kinesis.client.zionative.{
+  CheckpointBehaviour,
+  DiagnosticEvent,
+  FetchMode,
+  LeaseRepository,
+  ShardAssignmentStrategy
+}
 import software.amazon.awssdk.http.async.SdkAsyncHttpClient
 import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient
 import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClientBuilder
@@ -12,11 +18,10 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClientBuilder
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClientBuilder
 import zio.aws.core.config
 import zio.aws.kinesis.Kinesis
-import zio.{ CancelableFuture, Unsafe, ZIO }
+import zio.{CancelableFuture, Unsafe, ZIO}
 
 import scala.concurrent.duration._
-import scala.concurrent.{ ExecutionContext, Future }
-import nl.vroste.zio.kinesis.client.zionative.CheckpointBehaviour
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * A scala-native Future based interface to the zio-kinesis Consumer

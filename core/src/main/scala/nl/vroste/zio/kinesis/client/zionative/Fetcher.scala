@@ -1,7 +1,7 @@
 package nl.vroste.zio.kinesis.client.zionative
 
 import nl.vroste.zio.kinesis.client.zionative.Fetcher.EndOfShard
-import zio.aws.kinesis.model.{ primitives, Record, Shard, StartingPosition }
+import zio.aws.kinesis.model.{Record, Shard, StartingPosition, primitives}
 import zio.stream.ZStream
 
 private[zionative] trait Fetcher {

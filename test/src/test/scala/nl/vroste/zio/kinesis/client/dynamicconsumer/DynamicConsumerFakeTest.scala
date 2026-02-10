@@ -6,7 +6,7 @@ import nl.vroste.zio.kinesis.client.serde.Serde
 import software.amazon.awssdk.services.kinesis.model.EncryptionType
 import zio.stream.ZStream
 import zio.test._
-import zio.{ durationInt, Chunk, Queue, Ref }
+import zio.{Chunk, Queue, Ref, durationInt}
 
 import java.time.OffsetDateTime
 

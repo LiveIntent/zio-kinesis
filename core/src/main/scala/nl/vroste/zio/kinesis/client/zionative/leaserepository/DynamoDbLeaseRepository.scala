@@ -8,7 +8,7 @@ import nl.vroste.zio.kinesis.client.zionative.LeaseRepository.{
 }
 import nl.vroste.zio.kinesis.client.zionative.leaserepository.DynamoDbLeaseRepository.Settings
 import nl.vroste.zio.kinesis.client.zionative.leaserepository.DynamoDbUtil._
-import nl.vroste.zio.kinesis.client.zionative.{ ExtendedSequenceNumber, LeaseRepository, SpecialCheckpoint }
+import nl.vroste.zio.kinesis.client.zionative.{ExtendedSequenceNumber, LeaseRepository, SpecialCheckpoint}
 import software.amazon.awssdk.services.dynamodb.model.{
   ConditionalCheckFailedException,
   ResourceInUseException,
@@ -17,8 +17,8 @@ import software.amazon.awssdk.services.dynamodb.model.{
 import zio._
 import zio.aws.dynamodb
 import zio.aws.dynamodb.model._
-import zio.aws.dynamodb.model.primitives.{ AttributeName, ConditionExpression, TableArn }
-import zio.aws.dynamodb.{ model, DynamoDb }
+import zio.aws.dynamodb.model.primitives.{AttributeName, ConditionExpression, TableArn}
+import zio.aws.dynamodb.{DynamoDb, model}
 import zio.stream.ZStream
 
 import java.util.concurrent.TimeoutException

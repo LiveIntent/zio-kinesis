@@ -3,7 +3,7 @@ import nl.vroste.zio.kinesis.client.zionative.LeaseCoordinator.AcquiredLease
 import zio.aws.kinesis.model.Shard
 import zio.aws.kinesis.model.primitives.ShardId
 import zio.stream.ZStream
-import zio.{ Promise, UIO, ZIO }
+import zio.{Promise, UIO, ZIO}
 
 private[zionative] trait LeaseCoordinator {
   def makeCheckpointer(

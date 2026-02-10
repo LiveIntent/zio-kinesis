@@ -3,7 +3,7 @@ package nl.vroste.zio.kinesis.client.examples
 import nl.vroste.zio.kinesis.client.HttpClientBuilder
 import nl.vroste.zio.kinesis.client.serde.Serde
 import nl.vroste.zio.kinesis.client.zionative.Consumer
-import nl.vroste.zio.kinesis.client.zionative.metrics.{ CloudWatchMetricsPublisher, CloudWatchMetricsPublisherConfig }
+import nl.vroste.zio.kinesis.client.zionative.metrics.{CloudWatchMetricsPublisher, CloudWatchMetricsPublisherConfig}
 import zio.Console.printLine
 import zio._
 

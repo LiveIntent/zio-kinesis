@@ -1,6 +1,13 @@
 import xerial.sbt.Sonatype.GitHubHosting
 import org.typelevel.scalacoptions.ScalacOptions
 
+addCommandAlias("prepare", "fix; fmt")
+addCommandAlias("check", "fixCheck; fmtCheck")
+addCommandAlias("fix", "scalafixAll")
+addCommandAlias("fixCheck", "scalafixAll --check")
+addCommandAlias("fmt", "all scalafmtSbt scalafmtAll")
+addCommandAlias("fmtCheck", "all scalafmtSbtCheck scalafmtCheckAll")
+
 val mainScala = "2.13.18"
 val allScala  = Seq(mainScala, "3.3.7")
 
@@ -12,6 +19,8 @@ inThisBuild(
     homepage                         := Some(url("https://github.com/svroonland/zio-kinesis")),
     licenses                         := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     scalaVersion                     := mainScala,
+    semanticdbEnabled                := true,
+    semanticdbVersion                := scalafixSemanticdb.revision,
     crossScalaVersions               := allScala,
     compileOrder                     := CompileOrder.JavaThenScala,
     Test / parallelExecution         := false,

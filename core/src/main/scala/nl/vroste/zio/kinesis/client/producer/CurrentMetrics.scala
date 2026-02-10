@@ -5,7 +5,7 @@ import nl.vroste.zio.kinesis.client.producer.ProducerMetrics.{
   emptyPayloadSizes,
   emptyRecordSizes
 }
-import org.HdrHistogram.{ Histogram, IntCountsHistogram }
+import org.HdrHistogram.{Histogram, IntCountsHistogram}
 import zio._
 
 import java.time.Instant

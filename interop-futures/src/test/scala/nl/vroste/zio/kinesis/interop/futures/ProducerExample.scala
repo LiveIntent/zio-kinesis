@@ -5,7 +5,7 @@ import nl.vroste.zio.kinesis.client.serde.Serde
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import scala.concurrent.{ Await, Future }
+import scala.concurrent.{Await, Future}
 
 object ProducerExample extends App {
 

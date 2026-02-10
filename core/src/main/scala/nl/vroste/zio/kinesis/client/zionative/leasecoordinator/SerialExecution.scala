@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis.client.zionative.leasecoordinator
-import zio.stm.{ TMap, TSemaphore, ZSTM }
-import zio.{ Scope, ZIO }
+import zio.stm.{TMap, TSemaphore, ZSTM}
+import zio.{Scope, ZIO}
 
 /**
  * Ensures that effects are run serially per key

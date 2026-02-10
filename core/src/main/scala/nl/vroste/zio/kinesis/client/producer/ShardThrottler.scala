@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis.client.producer
 import nl.vroste.zio.kinesis.client.producer.ShardThrottler.DynamicThrottler
-import zio.{ UIO, _ }
+import zio.{UIO, _}
 
 private[client] trait ShardThrottler {
   def getForShard(shardId: String): UIO[DynamicThrottler]

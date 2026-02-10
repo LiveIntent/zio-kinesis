@@ -1,7 +1,7 @@
 package nl.vroste.zio.kinesis.client.zionative.leasecoordinator
 import nl.vroste.zio.kinesis.client.Record
 import nl.vroste.zio.kinesis.client.zionative._
-import nl.vroste.zio.kinesis.client.zionative.leasecoordinator.DefaultCheckpointer.{ State, UpdateCheckpoint }
+import nl.vroste.zio.kinesis.client.zionative.leasecoordinator.DefaultCheckpointer.{State, UpdateCheckpoint}
 import zio._
 
 private[zionative] class DefaultCheckpointer(

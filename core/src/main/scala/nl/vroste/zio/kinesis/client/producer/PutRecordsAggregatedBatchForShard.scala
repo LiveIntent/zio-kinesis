@@ -2,14 +2,14 @@ package nl.vroste.zio.kinesis.client.producer
 
 import nl.vroste.zio.kinesis.client.ProtobufAggregation
 import nl.vroste.zio.kinesis.client.producer.ProducerLive.{
+  ProduceRequest,
   maxPayloadSizePerRecord,
-  payloadSizeForEntryAggregated,
-  ProduceRequest
+  payloadSizeForEntryAggregated
 }
 import nl.vroste.zio.kinesis.client.zionative.protobuf.Messages
 import nl.vroste.zio.kinesis.client.zionative.protobuf.Messages.AggregatedRecord
 import zio.aws.kinesis.model.primitives.PartitionKey
-import zio.{ Chunk, UIO, ZIO }
+import zio.{Chunk, UIO, ZIO}
 
 import java.security.MessageDigest
 import scala.jdk.CollectionConverters._

@@ -1,12 +1,12 @@
 package nl.vroste.zio.kinesis.client.dynamicconsumer.fake
 
-import nl.vroste.zio.kinesis.client.dynamicconsumer.DynamicConsumer.{ Checkpointer, Record }
-import nl.vroste.zio.kinesis.client.dynamicconsumer.{ DynamicConsumer, ExtendedSequenceNumber, SchedulerConfig }
-import nl.vroste.zio.kinesis.client.serde.{ Deserializer, Serializer }
+import nl.vroste.zio.kinesis.client.dynamicconsumer.DynamicConsumer.{Checkpointer, Record}
+import nl.vroste.zio.kinesis.client.dynamicconsumer.{DynamicConsumer, ExtendedSequenceNumber, SchedulerConfig}
+import nl.vroste.zio.kinesis.client.serde.{Deserializer, Serializer}
 import software.amazon.awssdk.services.kinesis.model.EncryptionType
 import software.amazon.kinesis.common.InitialPositionInStreamExtended
 import zio.stream.ZStream
-import zio.{ Clock, _ }
+import zio.{Clock, _}
 
 private[client] class DynamicConsumerFake(
   shards: ZStream[Any, Throwable, (String, ZStream[Any, Throwable, Chunk[Byte]])],

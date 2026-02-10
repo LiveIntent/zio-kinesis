@@ -1,9 +1,9 @@
 package nl.vroste.zio.kinesis.client.producer
 import nl.vroste.zio.kinesis.client.producer.ProducerLive.{
+  ProduceRequest,
   maxPayloadSizePerRequest,
   maxRecordsPerRequest,
-  payloadSizeForEntry,
-  ProduceRequest
+  payloadSizeForEntry
 }
 import zio.Chunk
 

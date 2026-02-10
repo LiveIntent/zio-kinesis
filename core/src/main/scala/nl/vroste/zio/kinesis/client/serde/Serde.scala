@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis.client.serde
 
-import zio.{ Chunk, RIO }
+import zio.{Chunk, RIO}
 
 import scala.util.Try
 

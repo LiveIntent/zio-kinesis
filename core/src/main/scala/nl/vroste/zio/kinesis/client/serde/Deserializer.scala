@@ -1,8 +1,8 @@
 package nl.vroste.zio.kinesis.client.serde
 
-import zio.{ Chunk, RIO }
+import zio.{Chunk, RIO}
 
-import scala.util.{ Failure, Success, Try }
+import scala.util.{Failure, Success, Try}
 
 /**
  * Deserializer from byte array to a value of some type T
