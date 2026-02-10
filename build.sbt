@@ -50,7 +50,6 @@ lazy val root =
     .settings(stdSettings: _*)
     .settings(publish / skip := true)
     .aggregate(core, interopFutures, dynamicConsumer, tests, testUtils)
-    .dependsOn(core, interopFutures, dynamicConsumer, tests, testUtils)
 
 lazy val core =
   project
