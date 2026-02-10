@@ -9,7 +9,6 @@ addCommandAlias("fmt", "all scalafmtSbt scalafmtAll")
 addCommandAlias("fmtCheck", "all scalafmtSbtCheck scalafmtCheckAll")
 
 val mainScala = "2.13.18"
-val allScala  = Seq(mainScala, "3.3.7")
 
 val excludeInferAny = { options: Seq[String] => options.filterNot(Set("-Xlint:infer-any")) }
 
@@ -21,7 +20,6 @@ inThisBuild(
     scalaVersion                     := mainScala,
     semanticdbEnabled                := true,
     semanticdbVersion                := scalafixSemanticdb.revision,
-    crossScalaVersions               := allScala,
     compileOrder                     := CompileOrder.JavaThenScala,
     Test / parallelExecution         := false,
     Global / cancelable              := true,
