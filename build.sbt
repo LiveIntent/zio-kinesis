@@ -53,7 +53,7 @@ lazy val root =
     .enablePlugins(LiveIntentPlugin)
     .settings(stdSettings: _*)
     .settings(publish / skip := true)
-    .aggregate(core, dynamicConsumer, tests, testUtils)
+    .aggregate(core, dynamicConsumer, tests)
 
 lazy val core =
   project
@@ -74,22 +74,10 @@ lazy val dynamicConsumer =
     )
     .dependsOn(core % "compile->compile;test->test")
 
-lazy val testUtils =
-  project
-    .in(file("test-utils"))
-    .enablePlugins(LiveIntentPlugin)
-    .settings(stdSettings: _*)
-    .settings(
-      name                       := "zio-kinesis-test-utils",
-      assembly / assemblyJarName := "zio-kinesis-test-utils" + version.value + ".jar",
-      libraryDependencies ++= Dependencies.TestUtils
-    )
-    .dependsOn(dynamicConsumer % "compile->compile;test->test")
-
 lazy val tests =
   project
     .in(file("test"))
     .enablePlugins(LiveIntentPlugin)
     .settings(stdSettings: _*)
     .settings(publish / skip := true)
-    .dependsOn(dynamicConsumer % "compile->compile;test->test", testUtils % "compile->compile")
+    .dependsOn(dynamicConsumer % "compile->compile;test->test")
