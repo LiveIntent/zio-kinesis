@@ -53,7 +53,7 @@ lazy val root =
     .enablePlugins(LiveIntentPlugin)
     .settings(stdSettings: _*)
     .settings(publish / skip := true)
-    .aggregate(core, interopFutures, dynamicConsumer, tests, testUtils)
+    .aggregate(core, dynamicConsumer, tests, testUtils)
 
 lazy val core =
   project
@@ -61,18 +61,6 @@ lazy val core =
     .enablePlugins(LiveIntentPlugin, ProtobufPlugin)
     .settings(stdSettings: _*)
     .settings(name := "zio-kinesis")
-
-lazy val interopFutures =
-  project
-    .in(file("interop-futures"))
-    .enablePlugins(LiveIntentPlugin)
-    .settings(stdSettings: _*)
-    .settings(
-      name                             := "zio-kinesis-future",
-      assembly / assemblyJarName       := "zio-kinesis-future" + version.value + ".jar",
-      libraryDependencies += "dev.zio" %% "zio-interop-reactivestreams" % "1.3.4"
-    )
-    .dependsOn(core)
 
 lazy val dynamicConsumer =
   project
