@@ -9,30 +9,30 @@ ZIO Kinesis is a ZIO-based interface to Amazon Kinesis Data Streams for consumin
 
 The project is in beta stage. Although already being used in production by a small number of organisations, expect some issues to pop up and some changes to the interface. More beta users and feedback are of course welcome.
 
-- [Features](#features)
-- [Installation](#installation)
-- [Consumer](#consumer)
-  * [Basic usage using `consumeWith`](#basic-usage-using--consumewith-)
-  * [More advanced usage](#more-advanced-usage)
-  * [Checkpointing](#checkpointing)
-  * [Lease coordination](#lease-coordination)
-  * [Resharding](#resharding)
-  * [Consuming multiple Kinesis streams](#consuming-multiple-kinesis-streams)
-  * [Customization](#customization)
-  * [Diagnostic event & metrics](#diagnostic-event---metrics)
-  * [KCL compatibility](#kcl-compatibility)
-  * [Unsupported features](#unsupported-features)
-- [Configuration](#configuration)
-- [Producer](#producer)
-  * [Aggregation](#aggregation)
-  * [Metrics](#metrics)
-- [Future-based interface](#future-based-interface)
-- [DynamicConsumer](#dynamicconsumer)
-  * [Basic usage using `consumeWith`](#basic-usage-using--consumewith--1)
-  * [DynamicConsumerFake](#dynamicconsumerfake)
-  * [Advanced usage](#advanced-usage)
-- [Running tests and more usage examples](#running-tests-and-more-usage-examples)
-- [Credits](#credits)
+- [ZIO Kinesis](#zio-kinesis)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Consumer](#consumer)
+    - [Basic usage using `consumeWith`](#basic-usage-using-consumewith)
+    - [More advanced usage](#more-advanced-usage)
+    - [Checkpointing](#checkpointing)
+    - [Lease coordination](#lease-coordination)
+    - [Resharding](#resharding)
+    - [Consuming multiple Kinesis streams](#consuming-multiple-kinesis-streams)
+    - [Customization](#customization)
+    - [Diagnostic event \& metrics](#diagnostic-event--metrics)
+    - [KCL compatibility](#kcl-compatibility)
+    - [Unsupported features](#unsupported-features)
+  - [Configuration](#configuration)
+  - [Producer](#producer)
+    - [Aggregation](#aggregation)
+    - [Metrics](#metrics)
+  - [DynamicConsumer](#dynamicconsumer)
+    - [Basic usage using `consumeWith`](#basic-usage-using-consumewith-1)
+    - [DynamicConsumerFake](#dynamicconsumerfake)
+    - [Advanced usage](#advanced-usage)
+  - [Running tests and more usage examples](#running-tests-and-more-usage-examples)
+  - [Credits](#credits)
 
 ## Features
 
@@ -46,7 +46,6 @@ The library consists of:
   
 * `DynamicConsumer`
   An alternative to `Consumer`, being a wrapper around the AWS Kinesis Client Library (KCL).   
-  _NOTE Although `DynamicConsumer` will be included in this library for some time to come, it will eventually be deprecated and removed in favour of the ZIO-native `Consumer`. Users are recommended to upgrade._
   
 `zio-kinesis` is built on top of [zio-aws](https://github.com/vigoo/zio-aws), a library of automatically generated ZIO wrappers around AWS SDK methods.
 
@@ -349,49 +348,11 @@ object ProducerWithMetricsExample extends ZIOAppDefault {
 }
 ```
 
-## Future-based interface
-
-For cases when you need to integrate with existing `Future`-based application code, `Consumer` and `Producer` are available with a scala Future-based interface as well. 
-
-`Producer` offers full functionality while Consumer offers only `consumeWith`, the easiest way of consuming records from Kinesis.
-
-To use, add the following to your `build.sbt`:
-
-```scala
-libraryDependencies += "nl.vroste" %% "zio-kinesis-future" % "<version>"
-```
-
-`Consumer` and `Producer` are now available in the `nl.vroste.zio.kinesis.interop.futures` package.
-
-`Producer` can be used as follows:
-
-```scala
-import nl.vroste.zio.kinesis.client.ProducerRecord
-import nl.vroste.zio.kinesis.client.serde.Serde
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
-
-object ProducerExample extends App {
-  val producer = Producer.make[String]("my-stream", Serde.asciiString, metricsCollector = m => println(m))
-
-  val done = Future.traverse(List(1 to 10)) { i =>
-    producer.produce(ProducerRecord("key1", s"msg${i}"))
-  }
-
-  Await.result(done, 30.seconds)
-
-  producer.close()
-}
-```
-
 ## DynamicConsumer
+
 `DynamicConsumer` is an alternative to `Consumer`, backed by the 
 [Kinesis Client Library (KCL)](https://docs.aws.amazon.com/streams/latest/dev/shared-throughput-kcl-consumers.html). 
 
-_NOTE: Although `DynamicConsumer` will be included in this library for some time to come for backwards compatibility, it will eventually be deprecated and removed in favour of the ZIO native `Consumer`. Users are recommended to upgrade._
-  
 The interface is largely the same as `Consumer`, except for:
  * Some parameters for configuration 
  * The ZIO environment
@@ -514,23 +475,6 @@ object DynamicConsumerBasicUsageExample extends ZIOAppDefault {
 
 DynamicConsumer is resource-safe thanks to ZIO's `Scope`: after stream completion all resources acquired will be shutdown.
 
-### `zio-kinesis-test-utils` module
-
-This optional module gives access to utility functions in `TestUtil` that may be helpful for testing purposes eg:
-- creation of Kinesis streams in localstack with cleanup for a named stream
-- creation of Kinesis streams in localstack with cleanup for a randomly named stream
-- plus other functions such production of records
-
-It also has the `FakeRecordProcessor` which is a utility for use with the native `Consumer.consumeWith` and 
-`DynamicConsumer.consumeWith` functions. It holds processed record state and can also be programed to fail on a specific record.
-
-
-To use this module, add `zio-kinesis-test-utils` to your `build.sbt`:
-
-```scala
-libraryDependencies += "nl.vroste" %% "zio-kinesis-test-utils" % "<version>"
-```
-
 ## Running tests and more usage examples 
 
 See [core/src/test/scala/nl/vroste/zio/kinesis/client/examples](core/src/test/scala/nl/vroste/zio/kinesis/client/examples) for some examples. The [integration tests](core/src/test/scala/nl/vroste/zio/kinesis/client) are also good usage examples.
@@ -539,7 +483,7 @@ The tests run against a [`localstack`](https://github.com/localstack/localstack)
 `kinesis`, `dynamoDb` and `cloudwatch` endpoints locally. In order to run the tests you need to have `docker` and `docker-compose` 
 installed on your machine. Then on your machine open a terminal window and navigate to the root of this project and type: 
 
-    > docker-compose -f docker/docker-compose.yml up -d
+    > docker compose up -d
     
 To run the tests, enter the following in the terminal:
 
@@ -547,7 +491,7 @@ To run the tests, enter the following in the terminal:
     
 Don't forget to shut down the docker container after you have finished. In the terminal type:     
 
-    > docker-compose -f docker/docker-compose.yml down
+    > docker compose down
 
 ## Credits
 
