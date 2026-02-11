@@ -9,7 +9,7 @@ addCommandAlias("fmtCheck", "all scalafmtSbtCheck scalafmtCheckAll")
 
 inThisBuild(
   List(
-    organization             := "nl.vroste",
+    organization             := "com.liveintent",
     homepage                 := Some(url("https://github.com/liveintent/zio-kinesis")),
     licenses                 := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     scalaVersion             := LiveIntentPlugin.Scala213,

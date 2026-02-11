@@ -54,7 +54,7 @@ The library consists of:
 Add to your build.sbt:
 
 ```scala
-libraryDependencies += "nl.vroste" %% "zio-kinesis" % "<version>"
+libraryDependencies += "com.liveintent" %% "zio-kinesis" % "<version>"
 ```
 
 The latest version is built against and requires ZIO v2.0.2.
