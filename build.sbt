@@ -9,25 +9,20 @@ addCommandAlias("fmtCheck", "all scalafmtSbtCheck scalafmtCheckAll")
 
 inThisBuild(
   List(
-    organization                     := "nl.vroste",
-    homepage                         := Some(url("https://github.com/liveintent/zio-kinesis")),
-    licenses                         := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-    scalaVersion                     := LiveIntentPlugin.Scala213,
-    semanticdbEnabled                := true,
-    semanticdbVersion                := scalafixSemanticdb.revision,
-    compileOrder                     := CompileOrder.JavaThenScala,
-    Test / parallelExecution         := false,
-    Global / cancelable              := true,
-    Test / fork                      := true,
-    assembly / assemblyMergeStrategy := {
-      case PathList("META-INF", xs @ _*)       => MergeStrategy.discard
-      case n if n.startsWith("reference.conf") => MergeStrategy.concat
-      case _                                   => MergeStrategy.first
-    },
-    scmInfo                          := Some(
+    organization             := "nl.vroste",
+    homepage                 := Some(url("https://github.com/liveintent/zio-kinesis")),
+    licenses                 := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    scalaVersion             := LiveIntentPlugin.Scala213,
+    semanticdbEnabled        := true,
+    semanticdbVersion        := scalafixSemanticdb.revision,
+    compileOrder             := CompileOrder.JavaThenScala,
+    Test / parallelExecution := false,
+    Global / cancelable      := true,
+    Test / fork              := true,
+    scmInfo                  := Some(
       ScmInfo(url("https://github.com/liveintent/zio-kinesis/"), "scm:git:git@github.com:liveintent/zio-kinesis.git")
     ),
-    developers                       := List(
+    developers               := List(
       Developer(
         "svroonland",
         "Vroste",
@@ -68,8 +63,7 @@ lazy val dynamicConsumer =
     .enablePlugins(LiveIntentPlugin)
     .settings(stdSettings: _*)
     .settings(
-      name                       := "zio-kinesis-dynamic-consumer",
-      assembly / assemblyJarName := "zio-kinesis-dynamic-consumer" + version.value + ".jar",
+      name := "zio-kinesis-dynamic-consumer",
       libraryDependencies ++= Dependencies.DynamicConsumer
     )
     .dependsOn(core % "compile->compile;test->test")
