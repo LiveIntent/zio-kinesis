@@ -35,9 +35,4 @@ object Dependencies {
     List(
       "software.amazon.kinesis" % "amazon-kinesis-client" % kcl
     )
-
-  val TestUtils =
-    List(
-      "dev.zio" %% "zio-test" % zio
-    )
 }
