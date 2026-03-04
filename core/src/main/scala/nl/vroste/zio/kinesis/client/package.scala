@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis
 
-import software.amazon.awssdk.awscore.client.builder.{AwsAsyncClientBuilder, AwsClientBuilder}
+import software.amazon.awssdk.awscore.client.builder.{ AwsAsyncClientBuilder, AwsClientBuilder }
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration
 import software.amazon.awssdk.retries.LegacyRetryStrategy
 import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClientBuilder
@@ -12,7 +12,7 @@ import zio.aws.core.httpclient
 import zio.aws.core.httpclient.HttpClient
 import zio.aws.dynamodb.DynamoDb
 import zio.aws.kinesis.Kinesis
-import zio.{Task, ZIO, ZLayer}
+import zio.{ Task, ZIO, ZLayer }
 
 package object client {
   def kinesisAsyncClientLayer(

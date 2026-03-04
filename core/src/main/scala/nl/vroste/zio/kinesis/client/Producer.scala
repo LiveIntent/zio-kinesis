@@ -6,7 +6,7 @@ import nl.vroste.zio.kinesis.client.serde.Serializer
 import zio.Clock.instant
 import zio._
 import zio.aws.kinesis.Kinesis
-import zio.aws.kinesis.model.{ListShardsRequest, ShardFilter, ShardFilterType}
+import zio.aws.kinesis.model.{ ListShardsRequest, ShardFilter, ShardFilterType }
 import zio.stream.ZSink
 
 import java.security.MessageDigest

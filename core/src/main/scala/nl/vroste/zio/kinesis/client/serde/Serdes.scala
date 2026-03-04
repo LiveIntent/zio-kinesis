@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis.client.serde
 
-import zio.{Chunk, ZIO}
+import zio.{ Chunk, ZIO }
 
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets

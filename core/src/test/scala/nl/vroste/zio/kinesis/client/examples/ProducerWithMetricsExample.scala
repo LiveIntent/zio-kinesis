@@ -3,7 +3,7 @@ package nl.vroste.zio.kinesis.client.examples
 import nl.vroste.zio.kinesis.client
 import nl.vroste.zio.kinesis.client.producer.ProducerMetrics
 import nl.vroste.zio.kinesis.client.serde.Serde
-import nl.vroste.zio.kinesis.client.{Producer, ProducerRecord, ProducerSettings}
+import nl.vroste.zio.kinesis.client.{ Producer, ProducerRecord, ProducerSettings }
 import zio.Console.printLine
 import zio._
 

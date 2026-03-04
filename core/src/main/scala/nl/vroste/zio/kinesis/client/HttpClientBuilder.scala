@@ -1,7 +1,7 @@
 package nl.vroste.zio.kinesis.client
 import software.amazon.awssdk.http.Protocol
 import software.amazon.awssdk.http.async.SdkAsyncHttpClient
-import software.amazon.awssdk.http.nio.netty.{Http2Configuration, NettyNioAsyncHttpClient}
+import software.amazon.awssdk.http.nio.netty.{ Http2Configuration, NettyNioAsyncHttpClient }
 import zio._
 import zio.aws.core.httpclient
 import zio.aws.core.httpclient.HttpClient

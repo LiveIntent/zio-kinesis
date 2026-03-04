@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis.client
 
-import zio.aws.kinesis.model.primitives.{StreamARN, StreamName}
+import zio.aws.kinesis.model.primitives.{ StreamARN, StreamName }
 
 sealed trait StreamIdentifier {
   def name: Option[StreamName]

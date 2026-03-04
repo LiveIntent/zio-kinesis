@@ -7,20 +7,20 @@ import nl.vroste.zio.kinesis.client.zionative.Consumer.InitialPosition
 import nl.vroste.zio.kinesis.client.zionative._
 import nl.vroste.zio.kinesis.client.zionative.leaserepository.DynamoDbLeaseRepository
 import nl.vroste.zio.kinesis.client.zionative.leaserepository.DynamoDbLeaseRepository.TableParameters
-import nl.vroste.zio.kinesis.client.zionative.metrics.{CloudWatchMetricsPublisher, CloudWatchMetricsPublisherConfig}
+import nl.vroste.zio.kinesis.client.zionative.metrics.{ CloudWatchMetricsPublisher, CloudWatchMetricsPublisherConfig }
 import software.amazon.awssdk.http.SdkHttpConfigurationOption
 import software.amazon.awssdk.utils.AttributeMap
 import software.amazon.kinesis.exceptions.ShutdownException
 import zio._
 import zio.aws.cloudwatch.CloudWatch
 import zio.aws.dynamodb
-import zio.aws.dynamodb.model.primitives.{TagKeyString, TagValueString}
+import zio.aws.dynamodb.model.primitives.{ TagKeyString, TagValueString }
 import zio.aws.kinesis.Kinesis
-import zio.aws.kinesis.model.primitives.{PositiveIntegerObject, StreamName}
-import zio.aws.kinesis.model.{ScalingType, UpdateShardCountRequest}
+import zio.aws.kinesis.model.primitives.{ PositiveIntegerObject, StreamName }
+import zio.aws.kinesis.model.{ ScalingType, UpdateShardCountRequest }
 import zio.logging.LogFormat
 import zio.logging.backend.SLF4J
-import zio.stream.{ZSink, ZStream}
+import zio.stream.{ ZSink, ZStream }
 
 /**
  * Runnable used for manually testing various features

@@ -6,7 +6,7 @@ import software.amazon.awssdk.utils.Md5Utils
 import zio.Chunk
 
 import java.security.MessageDigest
-import scala.util.{Failure, Try}
+import scala.util.{ Failure, Try }
 
 object ProtobufAggregation {
   // From https://github.com/awslabs/amazon-kinesis-producer/blob/master/aggregation-format.md

@@ -17,7 +17,7 @@ import zio.aws.kinesis.model.Shard
 import zio.aws.kinesis.model.primitives.ShardId
 import zio.stream.ZStream
 
-import java.time.{DateTimeException, Instant}
+import java.time.{ DateTimeException, Instant }
 
 /**
  * Coordinates leases for shards between different workers

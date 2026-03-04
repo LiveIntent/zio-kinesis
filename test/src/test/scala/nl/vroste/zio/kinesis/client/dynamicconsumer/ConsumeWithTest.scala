@@ -4,7 +4,7 @@ import nl.vroste.zio.kinesis.client.TestUtil._
 import nl.vroste.zio.kinesis.client.dynamicconsumer.DynamicConsumer.consumeWith
 import nl.vroste.zio.kinesis.client.localstack.LocalStackServices
 import nl.vroste.zio.kinesis.client.serde.Serde
-import nl.vroste.zio.kinesis.client.{FakeRecordProcessor, ProducerRecord}
+import nl.vroste.zio.kinesis.client.{ FakeRecordProcessor, ProducerRecord }
 import zio.Console.printLine
 import zio.aws.cloudwatch.CloudWatch
 import zio.aws.dynamodb.DynamoDb
@@ -12,9 +12,9 @@ import zio.aws.kinesis.Kinesis
 import zio.logging.LogFormat
 import zio.logging.backend.SLF4J
 import zio.test.Assertion.equalTo
-import zio.test.TestAspect.{timeout, withLiveClock, withLiveRandom}
-import zio.test.{ZIOSpecDefault, assert}
-import zio.{Promise, Ref, ZIO, ZLayer, durationInt}
+import zio.test.TestAspect.{ timeout, withLiveClock, withLiveRandom }
+import zio.test.{ assert, ZIOSpecDefault }
+import zio.{ durationInt, Promise, Ref, ZIO, ZLayer }
 
 object ConsumeWithTest extends ZIOSpecDefault {
 

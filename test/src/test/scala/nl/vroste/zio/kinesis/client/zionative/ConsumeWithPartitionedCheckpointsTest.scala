@@ -3,11 +3,11 @@ package nl.vroste.zio.kinesis.client.zionative
 import nl.vroste.zio.kinesis.client.TestUtil._
 import nl.vroste.zio.kinesis.client.serde.Serde
 import nl.vroste.zio.kinesis.client.zionative.leaserepository.DynamoDbLeaseRepository
-import nl.vroste.zio.kinesis.client.{FakeRecordProcessor, ProducerRecord}
+import nl.vroste.zio.kinesis.client.{ FakeRecordProcessor, ProducerRecord }
 import zio._
-import zio.test.Assertion.{equalTo, isSome}
-import zio.test.TestAspect.{timeout, withLiveClock, withLiveRandom}
-import zio.test.{ZIOSpecDefault, assert}
+import zio.test.Assertion.{ equalTo, isSome }
+import zio.test.TestAspect.{ timeout, withLiveClock, withLiveRandom }
+import zio.test.{ assert, ZIOSpecDefault }
 
 object ConsumeWithPartitionedCheckpointsTest extends ZIOSpecDefault {
   override def spec =

@@ -4,12 +4,12 @@ import nl.vroste.zio.kinesis.client.StreamIdentifier.StreamIdentifierByArn
 import nl.vroste.zio.kinesis.client.Util
 import nl.vroste.zio.kinesis.client.zionative.Consumer.childShardToShard
 import nl.vroste.zio.kinesis.client.zionative.Fetcher.EndOfShard
-import nl.vroste.zio.kinesis.client.zionative.{DiagnosticEvent, FetchMode, Fetcher}
+import nl.vroste.zio.kinesis.client.zionative.{ DiagnosticEvent, FetchMode, Fetcher }
 import software.amazon.awssdk.services.kinesis.model.ResourceInUseException
 import zio._
 import zio.aws.kinesis.Kinesis
 import zio.aws.kinesis.model._
-import zio.aws.kinesis.model.primitives.{ConsumerARN, ConsumerName, ShardId, StreamARN}
+import zio.aws.kinesis.model.primitives.{ ConsumerARN, ConsumerName, ShardId, StreamARN }
 import zio.stream.ZStream
 
 import scala.util.control.NonFatal

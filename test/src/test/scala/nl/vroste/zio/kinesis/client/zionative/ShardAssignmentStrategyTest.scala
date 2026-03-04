@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis.client.zionative
 
-import nl.vroste.zio.kinesis.client.zionative.ShardAssignmentStrategy.{LeaseInfo, leasesToHave}
+import nl.vroste.zio.kinesis.client.zionative.ShardAssignmentStrategy.{ leasesToHave, LeaseInfo }
 import zio.test._
 
 object ShardAssignmentStrategyTest extends ZIOSpecDefault {

@@ -1,5 +1,5 @@
 package nl.vroste.zio.kinesis.client.zionative.leasecoordinator
-import zio.{Cause, Exit, URIO, ZIO}
+import zio.{ Cause, Exit, URIO, ZIO }
 
 object ZioExtensions {
   implicit class OnSuccessSyntax[R, E, A](private val zio: ZIO[R, E, A]) extends AnyVal {

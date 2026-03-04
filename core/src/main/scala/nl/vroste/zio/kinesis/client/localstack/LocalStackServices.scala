@@ -1,7 +1,11 @@
 package nl.vroste.zio.kinesis.client.localstack
 
 import nl.vroste.zio.kinesis.client.HttpClientBuilder
-import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, AwsCredentialsProvider, StaticCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{
+  AwsBasicCredentials,
+  AwsCredentialsProvider,
+  StaticCredentialsProvider
+}
 import software.amazon.awssdk.awscore.client.builder.AwsClientBuilder
 import software.amazon.awssdk.core.SdkSystemSetting
 import software.amazon.awssdk.http.SdkHttpConfigurationOption

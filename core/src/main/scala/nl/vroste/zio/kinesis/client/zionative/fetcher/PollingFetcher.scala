@@ -1,9 +1,9 @@
 package nl.vroste.zio.kinesis.client.zionative.fetcher
 import nl.vroste.zio.kinesis.client.StreamIdentifier
 import nl.vroste.zio.kinesis.client.Util._
-import nl.vroste.zio.kinesis.client.zionative.Consumer.{childShardToShard, retryOnThrottledWithSchedule}
+import nl.vroste.zio.kinesis.client.zionative.Consumer.{ childShardToShard, retryOnThrottledWithSchedule }
 import nl.vroste.zio.kinesis.client.zionative.Fetcher.EndOfShard
-import nl.vroste.zio.kinesis.client.zionative.{DiagnosticEvent, FetchMode, Fetcher}
+import nl.vroste.zio.kinesis.client.zionative.{ DiagnosticEvent, FetchMode, Fetcher }
 import software.amazon.awssdk.services.kinesis.model.ExpiredIteratorException
 import zio._
 import zio.aws.core.AwsError

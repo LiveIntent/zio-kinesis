@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis.client.zionative
 
-import nl.vroste.zio.kinesis.client.{Record, Util}
+import nl.vroste.zio.kinesis.client.{ Record, Util }
 import zio._
 import zio.stream.ZStream
 

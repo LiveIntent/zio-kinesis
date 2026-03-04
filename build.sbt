@@ -1,9 +1,7 @@
 import org.typelevel.scalacoptions.ScalacOptions
 
-addCommandAlias("prepare", "fix; fmt")
-addCommandAlias("check", "fixCheck; fmtCheck")
-addCommandAlias("fix", "scalafixAll")
-addCommandAlias("fixCheck", "scalafixAll --check")
+addCommandAlias("prepare", "fmt")
+addCommandAlias("check", "fmtCheck")
 addCommandAlias("fmt", "all scalafmtSbt scalafmtAll")
 addCommandAlias("fmtCheck", "all scalafmtSbtCheck scalafmtCheckAll")
 
@@ -13,8 +11,6 @@ inThisBuild(
     homepage                 := Some(url("https://github.com/liveintent/zio-kinesis")),
     licenses                 := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     scalaVersion             := LiveIntentPlugin.Scala213,
-    semanticdbEnabled        := true,
-    semanticdbVersion        := scalafixSemanticdb.revision,
     compileOrder             := CompileOrder.JavaThenScala,
     Test / parallelExecution := false,
     Global / cancelable      := true,

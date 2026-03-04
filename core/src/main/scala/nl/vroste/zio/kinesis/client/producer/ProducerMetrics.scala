@@ -1,6 +1,6 @@
 package nl.vroste.zio.kinesis.client.producer
 
-import org.HdrHistogram.{AbstractHistogram, Histogram, IntCountsHistogram}
+import org.HdrHistogram.{ AbstractHistogram, Histogram, IntCountsHistogram }
 import zio._
 
 /**
