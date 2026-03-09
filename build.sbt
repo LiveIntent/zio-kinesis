@@ -15,7 +15,6 @@ inThisBuild(
     Test / parallelExecution := false,
     Global / cancelable      := true,
     Test / fork              := true,
-    ghreleaseRepoName        := "zio-kinesis",
     scmInfo                  := Some(
       ScmInfo(url("https://github.com/liveintent/zio-kinesis/"), "scm:git:git@github.com:liveintent/zio-kinesis.git")
     ),
@@ -36,7 +35,8 @@ lazy val stdSettings: Seq[sbt.Def.SettingsDefinition] =
   Seq(
     // Suppresses problems with Scaladoc @throws links
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
-    libraryDependencies ++= Dependencies.Common
+    libraryDependencies ++= Dependencies.Common,
+    ghreleaseRepoName := "zio-kinesis"
   )
 
 lazy val root =
