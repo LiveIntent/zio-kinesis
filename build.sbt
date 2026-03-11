@@ -36,7 +36,8 @@ lazy val stdSettings: Seq[sbt.Def.SettingsDefinition] =
     // Suppresses problems with Scaladoc @throws links
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
     libraryDependencies ++= Dependencies.Common,
-    ghreleaseRepoName := "zio-kinesis"
+    ghreleaseRepoName := "zio-kinesis",
+    ghreleaseTitle    := { tag => s"$tag" }
   )
 
 lazy val root =
