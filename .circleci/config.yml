@@ -9,7 +9,7 @@ parameters:
     default: "d7:1a:f0:af:4a:ec:2f:04:c3:8d:d2:4f:7b:f7:1c:53"
   cache_prefix:
     type: string
-    default: v1
+    default: v2
   jdk_version:
     type: string
     default: "21"
