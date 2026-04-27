@@ -1,6 +1,6 @@
 resolvers += "Artifactory" at "https://boomtrain.jfrog.io/artifactory/sbt"
 
-addSbtPlugin("com.liveintent" % "li-sbt-plugins" % "8.22.1")
+addSbtPlugin("com.liveintent" % "li-sbt-plugins" % "8.22.2")
 addSbtPlugin("com.github.sbt" % "sbt-protobuf"   % "0.8.3")
 addSbtPlugin("org.scalameta"  % "sbt-scalafmt"   % "2.6.0")
 
