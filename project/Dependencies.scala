@@ -5,8 +5,8 @@ object Dependencies {
     val hdrHistogram              = "2.2.2"
     val jaxB                      = "2.3.1"
     val kcl                       = "3.4.3"
-    val zio                       = "2.1.25"
-    val zioAws                    = "7.42.28.3"
+    val zio                       = "2.1.26"
+    val zioAws                    = "7.42.41.1"
     val zioInteropReactiveStreams = "2.0.2"
     val zioLogging                = "2.5.3"
   }
