@@ -6,7 +6,7 @@ object Dependencies {
     val jaxB                      = "2.3.1"
     val kcl                       = "3.5.1"
     val zio                       = "2.1.26"
-    val zioAws                    = "7.46.17.6"
+    val zioAws                    = "7.46.17.8"
     val zioInteropReactiveStreams = "2.0.2"
     val zioLogging                = "2.5.3"
   }
